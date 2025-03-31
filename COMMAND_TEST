@@ -1,1 +1,10 @@
-dfgdgdf
+execução por eval. cuidado, não use exit e nem __FILE__
+
+[__GIT_COMMAND]
+
+if(0)
+{
+    
+}
+
+[/GIT_COMMAND]
