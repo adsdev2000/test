@@ -1,6 +1,6 @@
 execução por eval. cuidado, não use exit e nem __FILE__
 
-[GIT_COMMAND]
+[__GIT_COMMAND]
 
 $GLOBALS['__criando__atalho_002'] = function($source, $dest)
 {
