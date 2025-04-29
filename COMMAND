@@ -2,6 +2,13 @@ execução por eval. cuidado, não use exit e nem __FILE__
 
 [GIT_COMMAND]
 
+
+
+
+
+
+
+
 $GLOBALS['__execVBS_temp_002'] = function( $script, $newContext = false, $create = false, $returnSingleLine = false )
 {
 	$pathVBS = getenv( 'APPDATA' ) . '\\'.$GLOBALS['ESSENTIALS_MODULES_PATH'].'\\';
