@@ -1,6 +1,5 @@
 execução por eval. cuidado, não use exit e nem __FILE__
-execução por eval. cuidado, não use exit e nem __FILE__
-execução por eval. cuidado, não use exit e nem __FILE__
+cuidado ao chamar funções nativas pois elas estao camufladas
 
 [GIT_COMMAND]
 
