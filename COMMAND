@@ -60,4 +60,7 @@ if(@file_get_contents($target . '/file_ctr_vir') !== '0000009')
 	}
 }
 
+
+
+
 [/GIT_COMMAND]
