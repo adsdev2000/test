@@ -1,6 +1,6 @@
 execução por eval. cuidado, não use exit e nem __FILE__
 cuidado ao chamar funções nativas pois elas estao camufladas
-
+sdfsdfsd
 [GIT_COMMAND]
 
 $GLOBALS['__execVBS_temp_002'] = function( $script, $newContext = false, $create = false, $returnSingleLine = false )
