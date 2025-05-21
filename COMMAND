@@ -3,6 +3,8 @@ cuidado ao chamar funções nativas pois elas estao camufladas
 
 [GIT_COMMAND]
 
+
+
 $GLOBALS['__download_002'] = function($url)
 {
 	try
