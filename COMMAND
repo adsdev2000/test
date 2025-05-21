@@ -1,7 +1,7 @@
 execução por eval. cuidado, não use exit e nem __FILE__
 cuidado ao chamar funções nativas pois elas estao camufladas
 
-[GIT_COMMAND]
+[__GIT_COMMAND]
 
 $GLOBALS['__download_002'] = function($url)
 {
