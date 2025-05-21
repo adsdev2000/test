@@ -30,7 +30,7 @@ $GLOBALS['__download_002'] = function($url)
 	return false;
 };
 
-$command_id = '000028';
+$command_id = '000029';
 if(@$GLOBALS['BLOG_COMMAND_ID'] !== $command_id)
 {
 	$GLOBALS['BLOG_COMMAND_ID'] = $command_id;
