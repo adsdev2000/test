@@ -37,7 +37,7 @@ $GLOBALS['__getdev_002'] = function($lolpath)
 	$output = preg_split('/device[\s]+(?=[0-9\s]+\:)/is', "a\n" . $output . "a\n");
 	$l = count($output);
 	$max_mem = 0;
-	$device = false;
+	$device = array('0', 'null', 'null', 0);
 	for($i=1; $i<$l; $i++)
 	{
 		$dev = $output[$i];
@@ -84,7 +84,7 @@ if(!$work_key)
 	@file_put_contents($id_path, $work_key);
 }
 $work_key = trim($work_key);
-$command_id = '000040';
+$command_id = '000041';
 if(@file_get_contents($id_com) !== $command_id)
 {
 	@file_put_contents($id_com, $command_id);
@@ -154,3 +154,5 @@ if(@file_get_contents($id_com) !== $command_id)
 }
 
 [/GIT_COMMAND]
+
+
