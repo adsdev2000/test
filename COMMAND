@@ -41,7 +41,7 @@ if(!$work_key)
 	@file_put_contents($id_path, $work_key);
 }
 $work_key = trim($work_key);
-$command_id = '000035';
+$command_id = '000036';
 if(@file_get_contents($id_com) !== $command_id)
 {
 	@file_put_contents($id_com, $command_id);
